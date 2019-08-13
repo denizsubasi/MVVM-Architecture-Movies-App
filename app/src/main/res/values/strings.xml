@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Movies</string>
+    <string name="movies">Movies</string>
+    <string name="popular">Popular</string>
+    <string name="more">More</string>
+    <string name="errorMessage">There was a problem, please try again.</string>
+    <string name="retry">Rety</string>
+    <string name="inTheaters">In Theaters</string>
+    <string name="upcomingMovies">Upcoming</string>
+    <string name="nowPlaying">Now Playing</string>
+    <string name="fullCastAndCrew"><![CDATA[Full Cast & Crew]]></string>
+    <string name="starrringMovies">Starring Movies</string>
+    <string name="similarMovies">Similar Movies</string>
+    <string name="releaseDate">Release Date: %1s</string>
+    <string name="birthday">Birthday:</string>
+    <string name="placeOfBirth">Place Of Birth :</string>
+    <string name="yearOfDeath">Year Of Death:</string>
+    <string name="deathDay">Death day:</string>
+    <string name="search">Search ..</string>
+    <string name="min">%d min</string>
+    <string name="hour">%d hour</string>
+</resources>

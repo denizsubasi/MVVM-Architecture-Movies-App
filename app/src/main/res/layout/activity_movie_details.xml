@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.denizsubasi.moviesapp.domain.model.MoviesResponseItem" />
+
+        <import type="com.denizsubasi.moviesapp.domain.model.MovieObject"/>
+
+        <import type="com.denizsubasi.moviesapp.vo.Status" />
+
+        <import type="com.denizsubasi.moviesapp.vo.Resource" />
+
+        <import type="androidx.lifecycle.LiveData" />
+
+        <import type="android.view.View" />
+
+
+        <variable
+            name="movie"
+            type="com.denizsubasi.moviesapp.domain.model.MovieObject" />
+
+        <variable
+            name="isNotEmptyVoteAverage"
+            type="Boolean" />
+
+        <variable
+            name="response"
+            type="LiveData&lt;Resource&lt;MovieObject>>" />
+
+        <variable
+            name="retryCallback"
+            type="com.denizsubasi.moviesapp.ui.flow.common.RetryCallback" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/windowBackgroundColor"
+        android:orientation="vertical">
+
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:elevation="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:minHeight="200dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/movieImage"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    app:layout_collapseMode="parallax"
+                    app:layout_collapseParallaxMultiplier="0.7"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:movieImage="@{movie.movieImageUrl()}"
+                   />
+
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/black_bg_top_to_bottom"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/movieImage" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/playTrailer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_play"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/small_margin"
+                    android:src="@drawable/ic_back"
+                    android:visibility="visible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@android:color/white" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/black_bg_bottom_to_top"
+                    app:layout_constraintBottom_toBottomOf="@id/movieImage"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewMovieImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="30dp"
+            app:layout_constraintBottom_toBottomOf="@id/appBarLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/movieImageSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:adjustViewBounds="true"
+                android:elevation="10dp"
+                android:scaleType="fitXY"
+                app:movieImage="@{movie.movieImageUrl()}"
+               />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/genres"
+            style="@style/TextFieldStyle.Bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/arimo_bold"
+            android:padding="@dimen/small_margin"
+            android:text="@{movie.getGenresText()}"
+            android:textColor="@color/primaryPageTitleColor"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cardViewMovieImage"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+            tools:text="3,292 People wathing Action, Adventure, Fantasy" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/movieRate"
+            style="@style/TextFieldStyle.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/small_margin"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/arimo_bold_italic"
+            android:text="@{String.valueOf(movie.voteAverage)}"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/text_size_large"
+            android:visibility="@{isNotEmptyVoteAverage ? View.VISIBLE : View.GONE}"
+            app:layout_constraintStart_toEndOf="@id/cardViewMovieImage"
+            app:layout_constraintTop_toBottomOf="@id/genres"
+            tools:text="9.7" />
+
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:max="5"
+            android:clickable="false"
+            android:focusable="false"
+            android:numStars="5"
+            android:progressTint="@color/colorPrimaryDark"
+            android:scaleX=".5"
+            android:scaleY=".5"
+            android:stepSize="1.1"
+            android:transformPivotX="0dp"
+            android:transformPivotY="0dp"
+            android:visibility="@{isNotEmptyVoteAverage ? View.VISIBLE : View.GONE}"
+            app:layout_constraintStart_toEndOf="@id/movieRate"
+            app:layout_constraintTop_toBottomOf="@id/genres"
+            tools:rating="4" />
+
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/movieName"
+            style="@style/TextFieldStyle.PageTitle"
+            android:layout_width="0dp"
+            android:maxLines="2"
+            android:padding="@dimen/small_margin"
+            android:text="@{movie.title}"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_large"
+            app:autoSizeMaxTextSize="@dimen/title_text_size"
+            app:autoSizeMinTextSize="@dimen/text_size_small"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintBottom_toBottomOf="@id/appBarLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cardViewMovieImage"
+            tools:text="Narcos" />
+
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/layoutOverview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@android:color/white"
+            android:orientation="vertical"
+            android:scrollbarSize="4dp"
+            android:scrollbars="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cardViewMovieImage">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/releaseDate"
+                    style="@style/TextFieldStyle.Bold"
+                    tools:text="Release Date: 3 eylül 2018"
+                    android:paddingStart="@dimen/small_margin"
+                    android:paddingEnd="@dimen/small_margin"
+                    android:textSize="@dimen/text_size_small"
+                    android:paddingTop="@dimen/small_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/runtime"
+                    style="@style/TextFieldStyle.Bold"
+                    tools:text="133 dakika"
+                    android:paddingStart="@dimen/small_margin"
+                    android:paddingEnd="@dimen/small_margin"
+                    android:textSize="@dimen/text_size_small"
+                    android:paddingTop="@dimen/small_margin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/releaseDate"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/overview"
+                    style="@style/TextFieldStyle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:fontFamily="@font/arimo_bold"
+                    android:padding="@dimen/small_margin"
+                    android:text="@{movie.overview}"
+                    android:visibility="@{movie.isOverviewEmpty() ? View.GONE : View.VISIBLE}"
+                    app:autoSizeTextType="uniform"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/runtime"
+                    tools:text="Neden Kullanırız? Yinelenen bir sayfa içeriğinin okuyucunun dikkatini dağıttığı bilinen bir gerçektir. Lorem Ipsum kullanmanın amacı, sürekli 'buraya metin gelecek, buraya metin gelecek' yazmaya kıyasla daha dengeli bir harf dağılımı sağlayarak okunurluğu artırmasıdır. Şu anda birçok masaüstü yayıncılık paketi ve web sayfa düzenleyicisi, varsayılan mıgır metinler olarak Lorem Ipsum kullanmaktadır. Ayrıca arama motorlarında 'lorem ipsum' anahtar sözcükleri ile arama yapıldığında henüz tasarım aşamasında olan çok sayıda site listelenir. Yıllar içinde, bazen kazara, bazen bilinçli olarak (örneğin mizah katılarak), çeşitli sürümleri geliştirilmiştir. Nereden Gelir? Yaygın inancın tersine, Lorem Ipsum rastgele sözcüklerden oluşmaz. Kökleri M.Ö. 45 tarihinden bu yana klasik Latin edebiyatına kadar uzanan 2000 yıllık bir geçmişi vardır. Virginia'daki Hampden-Sydney College'dan Latince profesörü Richard McClintock, bir Lorem Ipsum pasajında geçen ve anlaşılması en güç sözcüklerden biri olan 'consectetur' sözcüğünün klasik edebiyattaki örneklerini incelediğinde kesin bir kaynağa ulaşmıştır. Lorm Ipsum, Çiçero tarafından M.Ö. 45 tarihinde kaleme alınan  (İyi ve Kötünün Uç Sınırları) eserinin 1.10.32 ve 1.10.33 sayılı bölümlerinden gelmektedir. Bu kitap, ahlak kuramı üzerine bir tezdir ve Rönesans döneminde çok popüler olmuştur. Lorem Ipsum pasajının ilk satırı olan Lorem ipsum dolor sit amet 1.10.32 sayılı bölümdeki bir satırdan gelmektedir. 1500'lerden beri kullanılmakta olan standard Lorem Ipsum metinleri ilgilenenler için yeniden üretilmiştir. Çiçero tarafından yazılan 1.10.32 ve 1.10.33 bölümleri de 1914 H. Rackham çevirisinden alınan İngilizce sürümleri eşliğinde özgün biçiminden yeniden üretilmiştir. Nereden Bulabilirim? Lorem Ipsum pasajlarının birçok çeşitlemesi vardır. Ancak bunların büyük bir çoğunluğu mizah katılarak veya rastgele sözcükler eklenerek değiştirilmişlerdir. Eğer bir Lorem Ipsum pasajı kullanacaksanız, metin aralarına utandırıcı sözcükler gizlenmediğinden emin olmanız gerekir. İnternet'teki tüm Lorem Ipsum üreteçleri önceden belirlenmiş metin bloklarını yineler. Bu da, bu üreteci İnternet üzerindeki gerçek Lorem Ipsum üreteci yapar. Bu üreteç, 200'den fazla Latince sözcük ve onlara ait cümle yapılarını içeren bir sözlük kullanır. Bu nedenle, üretilen Lorem Ipsum metinleri yinelemelerden, mizahtan ve karakteristik olmayan sözcüklerden uzaktır. 5 paragraf sözcük karakter liste 'Lorem ipsum dolor sit amet...' ile başlat" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/fullCastTextview"
+                    style="@style/TextFieldStyle.Bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/windowBackgroundColor"
+                    android:padding="@dimen/small_margin"
+                    android:text="@string/fullCastAndCrew"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/overview" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/crewRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/fullCastTextview" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/similarVideosTextview"
+                    style="@style/TextFieldStyle.Bold"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/windowBackgroundColor"
+                    android:padding="@dimen/small_margin"
+                    android:text="@string/similarMovies"
+                    android:visibility="gone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/crewRecyclerView" />
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/similarMoviesRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/similarVideosTextview" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <include
+            layout="@layout/loading_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.7"
+            app:retryCallback="@{() -> retryCallback.retry()}"
+            app:resource="@{(Resource) response}" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
